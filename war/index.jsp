@@ -34,7 +34,7 @@
 	<%
 		String fbURL = "http://www.facebook.com/dialog/oauth?client_id=215797211910886&redirect_uri="
 				+ URLEncoder
-						.encode("http://gae-face.appspot.com/gae_face&login=1")
+						.encode("http://gae-face.appspot.com/gae_face")
 				+ "&scope=email";
 	%>
 
