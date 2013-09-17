@@ -25,7 +25,7 @@ public class Gae_faceServlet extends HttpServlet {
 		if (code == null || code.equals("")) {
 			// an error occurred, handle this
 		}
-
+		
 		String token = null;
 		try {
 			String g = "https://graph.facebook.com/oauth/access_token?client_id=215797211910886&redirect_uri=" + URLEncoder.encode("http://gae-face.appspot.com/gae_face", "UTF-8") + "&client_secret=4baf605569c392ba15ae905e3571032a&code=" + code;
