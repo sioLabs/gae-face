@@ -55,6 +55,8 @@ public class LoginServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String token = null;
 		HttpSession session = request.getSession();
+		
+		System.out.println(name+"\n"+email+"\n"+ token);
 
 		boolean userExists = false;
 		User u = ofy().load().type(User.class).id(email).now();

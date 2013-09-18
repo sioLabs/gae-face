@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLEncoder, java.util.ArrayList"%>
+<%@ page session="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -52,34 +55,60 @@
 			<li class="toggle-topbar">
 				<a href="#"></a>
 			</li>
+			
 		</ul>
 		<section class="top-bar-section">
 			<ul class="right">
+			
+				
+				<c:choose>
+					<c:when test="${sessionScope.name !=null}">
+					<li >		<a id="username" href="#">${sessionScope.name}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a id="username" href="#">Welcome</a></li>
+					</c:otherwise>
+	
+				</c:choose>
+				</li>
+				
+		
+				<li class="divider"></li>
+				<li><a href="#">About Us</a></li>
 				<li><a class="designBtn" href="#">Design</a></li>
 				<li><a class="priceBtn" href="#">Price</a></li>
 				<li><a href="#">Product</a></li>
 				<li><a href="#">Winner</a></li>
-				<li><a href="#">About Us</a></li>
+				<c:if test = "${sessionScope.name ==null}">
+				<li id="signIn" class="has-dropdown no-click"><a href="#" data-dropdown="signInData">SignIn</a></li>
+				</c:if>
 			</ul>
 		</section>
 	</nav>
   
-  <!-- End Header and Nav -->
-
-	<a href="<%=fbURL%>">Login with facebook</a>
-
-	<br />
-	<span id="signinButton"> <span class="g-signin"
+  	<div id ="signInData" class="f-dropdown content small data-dropdown-content">
+  		<a href="<%=fbURL%>" style="padding-bottom:10px;"><img src="img/fb-login.png" width="70%" height="40px" /></a>
+  		<hr />
+  		<span id="signinButton" style="width:100%; height:57px;"> 
+  		<span class="g-signin"
 		data-callback="signinCallback"
 		data-clientid="327515160261.apps.googleusercontent.com"
 		data-cookiepolicy="single_host_origin"
 		data-requestvisibleactions="http://schemas.google.com/AddActivity"
 		data-approvalprompt="force" data-theme="dark"
-		data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email">
-	</span>
-	</span>
-
-	<br />
+		data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email"
+		data-width="wide"
+		>
+		</span>
+		</span>
+		<hr />
+		<b>Or login with our account</b> <br/>	
+		<input type="text" name="email" placeholder="Enter email" />
+		<input type="text" name="pwd" placeholder="Enter passowrd" />
+		<input type="button" class="small button" value="Login" />
+	</div>
+				
+  <!-- End Header and Nav -->
 
 	<div id="authOps" style="display: none">
 		<h2>User is now signed in to the app using Google+</h2>

@@ -3,11 +3,14 @@ $(document).ready(function(){
 		
 });
 
+var email="";
 //gmail helper code
+
 //////////helper code////////////////
 var helper = (function() {
 var BASE_API_PATH = 'plus/v1/';
 
+var name="";
 return {
   /**
    * Hides the sign in button and starts the post-authorization operations.
@@ -15,6 +18,9 @@ return {
    * @param {Object} authResult An Object which contains the access token and
    *   other authentication information.
    */
+	
+	
+	
   onSignInCallback: function(authResult) {
 
       gapi.client.load('plus', 'v1', function() {
@@ -23,21 +29,7 @@ return {
            $('#authResult').append(' ' + field + ': ' +
            authResult[field] + '<br/>');
            }*/
-          if (authResult['access_token']) {
-              $('#authOps').show('slow');
-              $('#signinButton').hide();
-              helper.profile();
-              //helper.people();
-          } else if (authResult['error']) {
-              // There was an error, which means the user is not signed in.
-              // As an example, you can handle by writing to the console:
-              console.log('There was an error: ' + authResult['error']);
-              //$('#authResult').append('Logged out');
-              $('#authOps').hide('slow');
-              $('#gConnect').show();
-          }
-
-          if (authResult) {
+    	  if (authResult) {
               if (authResult['error'] === undefined) {
                   gapi.auth.setToken(authResult); // Store the returned token.
                   getEmail();                     // Trigger request to get the email address.
@@ -47,6 +39,30 @@ return {
           } else {
               console.log('Empty authResult');  // Something went wrong
           }
+    	  
+          if (authResult['access_token']) {
+              gapi.auth.setToken(authResult); // Store the returned token.
+        	  
+        	  console.log('email : '+email);
+              //$('#authOps').show('slow');
+              $('#signIn').hide();
+              $('#signInData').hide();
+              //$('#signinButton').hide();
+              helper.profile();
+
+                  
+          
+          } 
+          else if (authResult['error']) {
+              // There was an error, which means the user is not signed in.
+              // As an example, you can handle by writing to the console:
+              console.log('There was an error: ' + authResult['error']);
+              //$('#authResult').append('Logged out');
+              $('#authOps').hide('slow');
+              $('#gConnect').show();
+          }
+
+         
       });
 
   },
@@ -58,7 +74,7 @@ return {
       $.ajax({
           type: 'GET',
           url: 'https://accounts.google.com/o/oauth2/revoke?token=' +
-                  gapi.auth.getToken().access_token,
+          gapi.auth.getToken().access_token,
           async: false,
           contentType: 'application/json',
           dataType: 'jsonp',
@@ -100,6 +116,7 @@ return {
 
       request.execute(function(profile) {
           $('#profile').empty();
+          name = profile.displayName;
           if (profile.error) {
               $('#profile').append(profile.error);
               return;
@@ -107,8 +124,9 @@ return {
 
           $('#profile').append(
                   $('<p><img src=\"' + profile.image.url + '\"></p>'));
-          $('#profile').append(
-                  $('<p>Hello ' + profile.displayName + '<br />About: ' + profile.aboutMe + '</p>'));
+          //$('#profile').append(
+            //      $('<p>Hello ' + profile.displayName + '<br />About: ' + profile.aboutMe + '</p>'));
+          
           
           if(profile.gender){
           	$('#profile').append(
@@ -140,6 +158,7 @@ data functions
 */
 function getEmail() {
 // Load the oauth2 libraries to enable the userinfo methods.
+	console.log('insied email');
 gapi.client.load('oauth2', 'v2', function() {
     var request = gapi.client.oauth2.userinfo.get();
     /*
@@ -152,13 +171,28 @@ gapi.client.load('oauth2', 'v2', function() {
 
 function getEmailCallback(obj) {
 var el = document.getElementById('email');
-var email = '';
+//var email = '';
 
 if (obj['email']) {
-    email = 'Email: ' + obj['email'];
+	email = obj['email'];
+	console.log(email);
+    
+    $.ajax({
+  	 type:'POST',
+       url : '/login',
+       data :{
+      	 'email':email,
+    		 'method':'2',
+    		 'name' : name                	 
+       },
+       async:false
+       
+    });
+  //  email = 'Email: ' + obj['email'];
 }
 
-el.innerHTML = email;
+//console.log(obj);
+///el.innerHTML = email;
 //toggleElement('email');
 }
 
