@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Facebook login</title>
 <!-- Place this asynchronous JavaScript just before your </body> tag -->
@@ -18,16 +19,16 @@
 		s.parentNode.insertBefore(po, s);
 	})();
 </script>
-<script src="http://code.jquery.com/jquery-1.9.0.min.js"
-	type="text/javascript"></script>
-<script src="https://apis.google.com/js/plusone.js"
-	type="text/javascript"></script>
+<script src="http://code.jquery.com/jquery-1.9.0.min.js"type="text/javascript"></script>
+<script src="https://apis.google.com/js/plusone.js"	type="text/javascript"></script>
 
-<%
-	//Write the check signin code here
-	//First check from where it came. 
-	//String token   = (String)request.getAttribute("token");
-%>
+
+<link rel="stylesheet" href="css/foundation.css" />
+<link rel="stylesheet" href="css/webicons.css">
+
+<script src="js/vendor/custom.modernizr.js"></script>
+
+
 </head>
 
 
@@ -40,6 +41,30 @@
 				+ URLEncoder.encode("http://gae-face.appspot.com/gae_face")
 				+ "&scope=email";
 	%>
+	
+		<nav class="top-bar">
+		<ul class="left">
+			<li class="name">
+				<h1>
+				 <a href="#">Fonspiration</a>
+				</h1>
+			</li>
+			<li class="toggle-topbar">
+				<a href="#"></a>
+			</li>
+		</ul>
+		<section class="top-bar-section">
+			<ul class="right">
+				<li><a class="designBtn" href="#">Design</a></li>
+				<li><a class="priceBtn" href="#">Price</a></li>
+				<li><a href="#">Product</a></li>
+				<li><a href="#">Winner</a></li>
+				<li><a href="#">About Us</a></li>
+			</ul>
+		</section>
+	</nav>
+  
+  <!-- End Header and Nav -->
 
 	<a href="<%=fbURL%>">Login with facebook</a>
 
@@ -75,202 +100,55 @@
 		<div id="email">Email:</div>
 	</div>
 
+	<!-- Scripts  -->
+	<script>
+  document.write('<script src=' +
+  ('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') +
+  '.js><\/script>')
+  </script>
+
+	<script src="js/foundation.min.js"></script>
+	<script src="js/default.js"></script>
+	<!--
+  
+  <script src="js/foundation/foundation.js"></script>
+  
+  <script src="js/foundation/foundation.interchange.js"></script>
+  
+  <script src="js/foundation/foundation.dropdown.js"></script>
+  
+  <script src="js/foundation/foundation.placeholder.js"></script>
+  
+  <script src="js/foundation/foundation.forms.js"></script>
+  
+  <script src="js/foundation/foundation.alerts.js"></script>
+  
+  <script src="js/foundation/foundation.magellan.js"></script>
+  
+  <script src="js/foundation/foundation.reveal.js"></script>
+  
+  <script src="js/foundation/foundation.tooltips.js"></script>
+  
+  <script src="js/foundation/foundation.clearing.js"></script>
+  
+  <script src="js/foundation/foundation.cookie.js"></script>
+  
+  <script src="js/foundation/foundation.joyride.js"></script>
+  
+  <script src="js/foundation/foundation.orbit.js"></script>
+  
+  <script src="js/foundation/foundation.section.js"></script>
+  
+  <script src="js/foundation/foundation.topbar.js"></script>
+  
+  -->
+
+	<script>
+    $(document).foundation();
+  </script>
+
 
 </body>
-<script>
-		function httpGet(theUrl) {
-			var xmlHttp = null;
-
-			xmlHttp = new XMLHttpRequest();
-			xmlHttp.open("GET", theUrl, false);
-			xmlHttp.send(null);
-			return xmlHttp.responseText;
-		}
-		
-		
-		//////////helper code////////////////
-		          var helper = (function() {
-                var BASE_API_PATH = 'plus/v1/';
-
-                return {
-                    /**
-                     * Hides the sign in button and starts the post-authorization operations.
-                     *
-                     * @param {Object} authResult An Object which contains the access token and
-                     *   other authentication information.
-                     */
-                    onSignInCallback: function(authResult) {
-
-                        gapi.client.load('plus', 'v1', function() {
-                            //$('#authResult').html('Auth Result:<br/>');
-                            /*for (var field in authResult) {
-                             $('#authResult').append(' ' + field + ': ' +
-                             authResult[field] + '<br/>');
-                             }*/
-                            if (authResult['access_token']) {
-                                $('#authOps').show('slow');
-                                $('#gConnect').hide();
-                                helper.profile();
-                                //helper.people();
-                            } else if (authResult['error']) {
-                                // There was an error, which means the user is not signed in.
-                                // As an example, you can handle by writing to the console:
-                                console.log('There was an error: ' + authResult['error']);
-                                //$('#authResult').append('Logged out');
-                                $('#authOps').hide('slow');
-                                $('#gConnect').show();
-                            }
-
-                            if (authResult) {
-                                if (authResult['error'] === undefined) {
-                                    gapi.auth.setToken(authResult); // Store the returned token.
-                                    getEmail();                     // Trigger request to get the email address.
-                                } else {
-                                    console.log('An error occurred');
-                                }
-                            } else {
-                                console.log('Empty authResult');  // Something went wrong
-                            }
-                        });
-
-                    },
-                    /**
-                     * Calls the OAuth2 endpoint to disconnect the app for the user.
-                     */
-                    disconnect: function() {
-                        // Revoke the access token.
-                        $.ajax({
-                            type: 'GET',
-                            url: 'https://accounts.google.com/o/oauth2/revoke?token=' +
-                                    gapi.auth.getToken().access_token,
-                            async: false,
-                            contentType: 'application/json',
-                            dataType: 'jsonp',
-                            success: function(result) {
-                                console.log('revoke response: ' + result);
-                                $('#authOps').hide();
-                                $('#profile').empty();
-                                $('#gConnect').show();
-                            },
-                            error: function(e) {
-                                console.log(e);
-                            }
-                        });
-                    },
-                    /**
-                     * Gets and renders the list of people visible to this app.
-                     */
-                    /*people: function() {
-                     var request = gapi.client.plus.people.list({
-                     'userId': 'me',
-                     'collection': 'visible'
-                     });
-                     request.execute(function(people) {
-                     $('#visiblePeople').empty();
-                     $('#visiblePeople').append('Number of people visible to this app: ' +
-                     people.totalItems + '<br/>');
-                     for (var personIndex in people.items) {
-                     person = people.items[personIndex];
-                     $('#visiblePeople').append('<img src="' + person.image.url + '">');
-                     }
-                     });
-                     },*/
-                    /**
-                     * Gets and renders the currently signed in user's profile data.
-                     */
-                    profile: function() {
-                        var request = gapi.client.plus.people.get({'userId': 'me'});
-
-
-                        request.execute(function(profile) {
-                            $('#profile').empty();
-                            if (profile.error) {
-                                $('#profile').append(profile.error);
-                                return;
-                            }
-
-                            $('#profile').append(
-                                    $('<p><img src=\"' + profile.image.url + '\"></p>'));
-                            $('#profile').append(
-                                    $('<p>Hello ' + profile.displayName + '<br />About: ' + profile.aboutMe + '</p>'));
-                            
-                            if(profile.gender){
-                            	$('#profile').append(
-                            		$('<p> Gender :'+ profile.gender +'</p><br/>'))	;	
-                            	
-                            	
-                            }
-                            if (profile.cover && profile.coverPhoto) {
-                                $('#profile').append(
-                                        $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
-                            }
-                        });
-                    }
-                };
-            })();
-		/////////////////////////////////////
-		
-		  /**
-             * jQuery initialization
-             */
-            $(document).ready(function() {
-                $('#disconnect').click(helper.disconnect);
-                if ($('[data-clientid="327515160261.apps.googleusercontent.com"]').length > 0) {
-                    alert('This sample requires your OAuth credentials (client ID) ' +
-                            'from the Google APIs console:\n' +
-                            '    https://code.google.com/apis/console/#:access\n\n' +
-                            'Find and replace YOUR_CLIENT_ID with your client ID.'
-                            );
-                }
-            });
-		
-		
-		function signinCallback(authResult) {
-				
-				helper.onSignInCallback(authResult)
-		}
-		
-		/*
-			data functions
-			
-		*/
-		  function getEmail() {
-            // Load the oauth2 libraries to enable the userinfo methods.
-            gapi.client.load('oauth2', 'v2', function() {
-                var request = gapi.client.oauth2.userinfo.get();
-                /*
-                 * This sentence call to the getEmailCallBack funtion in order to
-                 * process the response
-                 */
-                request.execute(getEmailCallback);
-            });
-        }
-
-        function getEmailCallback(obj) {
-            var el = document.getElementById('email');
-            var email = '';
-
-            if (obj['email']) {
-                email = 'Email: ' + obj['email'];
-            }
-
-            el.innerHTML = email;
-            //toggleElement('email');
-        }
-
-        function toggleElement(id) {
-            var el = document.getElementById(id);
-
-            if (el.getAttribute('class') === 'hide') {
-                el.setAttribute('class', 'show');
-            } else {
-                el.setAttribute('class', 'hide');
-            }
-        }
-        /*
-        end data functions
-        */
-	</script>
 
 
 </html>
