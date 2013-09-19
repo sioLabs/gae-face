@@ -62,7 +62,13 @@
 			
 				<c:choose>
 					<c:when test="${!empty sessionScope.name}">
-					<li >		<a id="username" href="#">${sessionScope.name}</a></li>
+					<li class="has-dropdown" >		<a id="username" href="#">${sessionScope.name}</a>
+					
+						<ul class="dropdown">
+							<li><a href="#" id="logout-btn">Sign out</a>
+						</ul>
+					
+					</li>
 					</c:when>
 					<c:otherwise>
 						<li><a id="username" href="#">Welcome</a></li>

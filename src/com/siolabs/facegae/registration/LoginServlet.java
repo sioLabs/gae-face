@@ -49,15 +49,31 @@ public class LoginServlet extends HttpServlet {
 		 * 1 = facebook 
 		 * 2 = google
 		 */
+		
+		
 		int method = Integer.parseInt(request.getParameter("method"));
+		
+		//logout code
+		if( 4 == method){
+			request.getSession().invalidate();
+			return;
+			//response.sendRedirect("index.jsp");
+		}
+		
+		
+		
+		
 		String email = request.getParameter("email");
 		String name = request.getParameter("name");
+		//System.out.println(name+"\n"+email+"\n");
+		
+
 		
 		String token = null;
 		HttpSession session = request.getSession();
 		session.setAttribute("method", method);
 		
-		System.out.println(name+"\n"+email+"\n"+ token);
+
 
 		boolean userExists = false;
 		User u = ofy().load().type(User.class).id(email).now();
@@ -65,7 +81,7 @@ public class LoginServlet extends HttpServlet {
 		if(null != u)
 			userExists = true;
 
-
+		
 
 
 

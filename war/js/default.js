@@ -4,6 +4,18 @@ var name="";
 
 var method ="";
 
+
+$('#logout-btn').click(function(){
+
+	$.post("/login", {method:'4'});
+	
+	$('#signIn').show();
+	FB.logout(function(res){
+		location.reload();
+	});
+	location.reload();
+	
+});
 //////FAcebook sdk
 //Additional JS functions here
 window.fbAsyncInit = function() {
@@ -29,36 +41,38 @@ window.fbAsyncInit = function() {
 }(document));
 
 
+$(document).on('fbload', function(){
+	FB.getLoginStatus(function(res){
+
+		if(res.status === "connected"){
+			getUserDetails();
+			$('#signIn').hide();
+			$('#signInData').hide();
+		}else if(res.status ==='not_authorized'){
+			/* user is logged in but not authorized the app*/
+			
+		}else{
+			//user is not logged in
+			
+		}
+	});
+});	
 
 //code to execute on page load
 $(document).ready(function(){
 
-	$(document).on('fbload', function(){
-		FB.getLoginStatus(function(res){
-
-			if(res.status === "connected"){
-				getUserDetails();
-				$('#signIn').hide();
-				$('#signInData').hide();
-			}else{
-				return;
-			}
-
-
-
-		});
-	});	
+	
 
 
 });
 
 function getUserDetails(){
+	return;
 	FB.api('/me', function(response){
+		
 		name = response.first_name +' '+ response.last_name;
 		email = response.email;
-		method=1;
-		console.log(name + ' ' +email + ' '+method);
-
+		//console.log(name + ' ' +email + ' '+method);
 		sendLoginInfo(email, name, method);
 	});
 }
@@ -91,7 +105,7 @@ var helper = (function() {
 				if (authResult['access_token']) {
 					gapi.auth.setToken(authResult); // Store the returned token.
 
-					console.log('email : '+email);
+					////console.log('email : '+email);
 					//$('#authOps').show('slow');
 					$('#signIn').hide();
 					$('#signInData').hide();
@@ -103,11 +117,11 @@ var helper = (function() {
 				} 
 				else if (authResult['error']) {
 					// There was an error, which means the user is not signed in.
-					// As an example, you can handle by writing to the console:
-					console.log('There was an error: ' + authResult['error']);
+					// As an example, you can handle by writing to the //console:
+					//console.log('There was an error: ' + authResult['error']);
 					//$('#authResult').append('Logged out');
 					$('#authOps').hide('slow');
-					$('#gConnect').show();
+					$('#signIn').show();
 				}
 
 				if (authResult) {
@@ -115,10 +129,10 @@ var helper = (function() {
 						gapi.auth.setToken(authResult); // Store the returned token.
 						getEmail();                     // Trigger request to get the email address.
 					} else {
-						console.log('An error occurred');
+						//console.log('An error occurred');
 					}
 				} else {
-					console.log('Empty authResult');  // Something went wrong
+					//console.log('Empty authResult');  // Something went wrong
 				}
 
 			});
@@ -137,13 +151,13 @@ var helper = (function() {
 				contentType: 'application/json',
 				dataType: 'jsonp',
 				success: function(result) {
-					console.log('revoke response: ' + result);
+					//console.log('revoke response: ' + result);
 					$('#authOps').hide();
 					$('#profile').empty();
 					$('#gConnect').show();
 				},
 				error: function(e) {
-					console.log(e);
+					//console.log(e);
 				}
 			});
 		},
@@ -180,7 +194,7 @@ var helper = (function() {
 					return;
 				}
 				name = profile.displayName;
-
+				//console.log('profile ' + name);
 
 //				$('#profile').append(
 //				$('<p><img src=\"' + profile.image.url + '\"></p>'));
@@ -208,7 +222,7 @@ var helper = (function() {
 
 //gmail sign in function
 function signinCallback(authResult) {
-
+	method=2;
 	helper.onSignInCallback(authResult);
 }
 
@@ -218,9 +232,9 @@ data functions
  */
 function getEmail() {
 //	Load the oauth2 libraries to enable the userinfo methods.
-	console.log('insied email');
+	//console.log('inside email');
 	gapi.client.load('oauth2', 'v2', function() {
-		var request = gapi.client.oauth2.userinfo.get();
+	var request = gapi.client.oauth2.userinfo.get();
 		/*
 		 * This sentence call to the getEmailCallBack funtion in order to
 		 * process the response
@@ -235,18 +249,25 @@ function getEmailCallback(obj) {
 
 	if (obj['email']) {
 		email = obj['email'];
-		//console.log(email + ' ' +name);   
-
+//		//console.log(email + ' ' +name); 
+//		//console.log('to loginInfo');
+		method=2;
 		sendLoginInfo(email, name, method);
 		//  email = 'Email: ' + obj['email'];
 	}
 
-//	console.log(obj);
+//	//console.log(obj);
 //	/el.innerHTML = email;
 //	toggleElement('email');
 }
 
 function sendLoginInfo(email,name,method){
+	//console.log('inside sendLoginInfo');
+	
+	if(method===5){
+		return;
+	}
+	
 	$.ajax({
 		type:'POST',
 		url : '/login',
@@ -255,9 +276,13 @@ function sendLoginInfo(email,name,method){
 			'method':method,
 			'name' : name                	 
 		},
+		success:function(){
+			location.reload();
+		},
 		async:false
-
 	});
+	
+	console.log(name);
 	//refresh the page
 	//location.reload();
 
