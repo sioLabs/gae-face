@@ -5,12 +5,12 @@ $(document).ready(function(){
 
 var email="";
 //gmail helper code
-
+var name="";
 //////////helper code////////////////
 var helper = (function() {
-var BASE_API_PATH = 'plus/v1/';
+//var BASE_API_PATH = 'plus/v1/';
 
-var name="";
+
 return {
   /**
    * Hides the sign in button and starts the post-authorization operations.
@@ -29,16 +29,7 @@ return {
            $('#authResult').append(' ' + field + ': ' +
            authResult[field] + '<br/>');
            }*/
-    	  if (authResult) {
-              if (authResult['error'] === undefined) {
-                  gapi.auth.setToken(authResult); // Store the returned token.
-                  getEmail();                     // Trigger request to get the email address.
-              } else {
-                  console.log('An error occurred');
-              }
-          } else {
-              console.log('Empty authResult');  // Something went wrong
-          }
+
     	  
           if (authResult['access_token']) {
               gapi.auth.setToken(authResult); // Store the returned token.
@@ -61,7 +52,17 @@ return {
               $('#authOps').hide('slow');
               $('#gConnect').show();
           }
-
+          
+    	  if (authResult) {
+              if (authResult['error'] === undefined) {
+                  gapi.auth.setToken(authResult); // Store the returned token.
+                  getEmail();                     // Trigger request to get the email address.
+              } else {
+                  console.log('An error occurred');
+              }
+          } else {
+              console.log('Empty authResult');  // Something went wrong
+          }
          
       });
 
@@ -116,28 +117,30 @@ return {
 
       request.execute(function(profile) {
           $('#profile').empty();
-          name = profile.displayName;
+          
           if (profile.error) {
               $('#profile').append(profile.error);
               return;
           }
+          name = profile.displayName;
+          
 
-          $('#profile').append(
-                  $('<p><img src=\"' + profile.image.url + '\"></p>'));
-          //$('#profile').append(
-            //      $('<p>Hello ' + profile.displayName + '<br />About: ' + profile.aboutMe + '</p>'));
-          
-          
-          if(profile.gender){
-          	$('#profile').append(
-          		$('<p> Gender :'+ profile.gender +'</p><br/>'))	;	
-          	
-          	
-          }
-          if (profile.cover && profile.coverPhoto) {
-              $('#profile').append(
-                      $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
-          }
+//          $('#profile').append(
+//                  $('<p><img src=\"' + profile.image.url + '\"></p>'));
+//          //$('#profile').append(
+//            //      $('<p>Hello ' + profile.displayName + '<br />About: ' + profile.aboutMe + '</p>'));
+//          
+//          
+//          if(profile.gender){
+//          	$('#profile').append(
+//          		$('<p> Gender :'+ profile.gender +'</p><br/>'))	;	
+//          	
+//          	
+//          }
+//          if (profile.cover && profile.coverPhoto) {
+//              $('#profile').append(
+//                      $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
+//          }
       });
   }
 };
@@ -170,24 +173,25 @@ gapi.client.load('oauth2', 'v2', function() {
 }
 
 function getEmailCallback(obj) {
-var el = document.getElementById('email');
+//var el = document.getElementById('email');
 //var email = '';
 
 if (obj['email']) {
 	email = obj['email'];
-	console.log(email);
+	console.log(email + ' ' +name);
     
     $.ajax({
   	 type:'POST',
        url : '/login',
        data :{
-      	 'email':email,
+    	   	 'email':email,
     		 'method':'2',
     		 'name' : name                	 
        },
        async:false
        
     });
+    location.reload();
   //  email = 'Email: ' + obj['email'];
 }
 

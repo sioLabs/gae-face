@@ -62,7 +62,7 @@
 			
 				
 				<c:choose>
-					<c:when test="${sessionScope.name !=null}">
+					<c:when test="${!empty sessionScope.name}">
 					<li >		<a id="username" href="#">${sessionScope.name}</a></li>
 					</c:when>
 					<c:otherwise>
