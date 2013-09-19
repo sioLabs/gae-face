@@ -60,7 +60,6 @@
 		<section class="top-bar-section">
 			<ul class="right">
 			
-				
 				<c:choose>
 					<c:when test="${!empty sessionScope.name}">
 					<li >		<a id="username" href="#">${sessionScope.name}</a></li>
