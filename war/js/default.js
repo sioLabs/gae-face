@@ -50,10 +50,10 @@ $(document).on('fbload', function(){
 			$('#signInData').hide();
 		}else if(res.status ==='not_authorized'){
 			/* user is logged in but not authorized the app*/
-			
+			return;
 		}else{
 			//user is not logged in
-			
+			return;
 		}
 	});
 });	

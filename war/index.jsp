@@ -27,7 +27,7 @@
 
 
 <link rel="stylesheet" href="css/foundation.css" />
-<link rel="stylesheet" href="css/webicons.css">
+<!-- <link rel="stylesheet" href="css/webicons.css"> -->
 
 <script src="js/vendor/custom.modernizr.js"></script>
 
@@ -65,17 +65,18 @@
 					<li class="has-dropdown" >		<a id="username" href="#">${sessionScope.name}</a>
 					
 						<ul class="dropdown">
-							<li><a href="#" id="logout-btn">Sign out</a>
+							<li><a href="#" id="logout-btn">Sign out</a></li>
 						</ul>
 					
 					</li>
 					</c:when>
+					
 					<c:otherwise>
 						<li><a id="username" href="#">Welcome</a></li>
 					</c:otherwise>
 	
 				</c:choose>
-				</li>
+				
 				
 		
 				<li class="divider"></li>
