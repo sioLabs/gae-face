@@ -38,12 +38,12 @@
 <body>
 
 
-
-	<%
-		String fbURL = "http://www.facebook.com/dialog/oauth?client_id=215797211910886&redirect_uri="
-				+ URLEncoder.encode("http://gae-face.appspot.com/gae_face")
-				+ "&scope=email";
-	%>
+<!--  facebook login -->
+<div id="fb-root"></div>
+<script>
+  
+</script>
+<!-- end facebook login -->
 	
 		<nav class="top-bar">
 		<ul class="left">
@@ -86,7 +86,7 @@
 	</nav>
   
   	<div id ="signInData" class="f-dropdown content small data-dropdown-content">
-  		<a href="<%=fbURL%>" style="padding-bottom:10px;"><img src="img/fb-login.png" width="70%" height="40px" /></a>
+  		<fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>  		
   		<hr />
   		<span id="signinButton" style="width:100%; height:57px;"> 
   		<span class="g-signin"

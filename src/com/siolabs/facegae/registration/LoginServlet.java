@@ -43,7 +43,6 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 
 		//Get all the data here
-
 		/*
 		 * Method data 
 		 * 0 = manual
@@ -53,8 +52,10 @@ public class LoginServlet extends HttpServlet {
 		int method = Integer.parseInt(request.getParameter("method"));
 		String email = request.getParameter("email");
 		String name = request.getParameter("name");
+		
 		String token = null;
 		HttpSession session = request.getSession();
+		session.setAttribute("method", method);
 		
 		System.out.println(name+"\n"+email+"\n"+ token);
 
